@@ -1,39 +1,215 @@
-export default function Scenarist ( ... order ) {
+/*
 
-if ( ! this ?.[ $ .play ] )
+# Faddy's Scenarist
+## Vanilla JavaScript Framework for Writing Playable and Recursive Scenarios
+
+As a blind person,
+who also experienced different levels of vision in the past,
+I found that the main issue causing limitations in accessibility to apps in different operating systems and platforms is that I'm limited to scenarios,
+most probably written by sighted people,
+that don't fit my physical and mental capabilities.
+To fix this silly issue, there must be a way for the user to write their own scenarios that satisfy their needs without waiting for developers to do so.
+But, to get to this point, a framework is needed for developers to be able to write scenarios in the first place;
+here comes Scenarist.
+
+Vanilla JavaScript was chosen to be the language of Scenarist for the following reasons:
+
+- it's widely used in app development whether for shell, web, mobile, desktop, server, IoT, and the list will keep going.
+- It's a functional programming language, so it's perfect for writing playable scenarios.
+- It's an object-oriented programming language, so it's perfect for writing recursive scenarios.
+
+This file contains the code of Scenarist and detailed explanation of it's logic.
+
+## Private Constants
+
+The following object contains secret symbols used through out the code.
+This way Scenarist is guaranteed to play in directions private to it.
+Every time a secret symbol from this object is used in the code, an explanation of it's purpose will be provided.
+
+*/
+
+const _ = {
+
+story: Symbol ( 'senarist/$story' ),
+location: Symbol ( 'senarist/$location' ),
+setting: Symbol ( 'scenarist/$setting' )
+
+};
+
+/*
+
+The $ (dollar sign) is used as an alias for the Symbol .for function through out the code.
+
+*/
+
+const $ = Symbol .for;
+
+/*
+
+The module exports only the Scenarist function.
+
+*/
+
+export default async function Scenarist ( ... order ) {
+
+/*
+
+Scenarist can then be imported as follows:
+
+```js
+import Scenarist from '@faddys/scenarist';
+
+const stamp = Symbol ( "Faddy's Stamp" );
+const functionScenario = function ( playForFunctionScenario, ... order ) {
+
+const functionScenario = this;
+const production = playForFunctionScenario ( stamp );
+const { stamp, location,
+
+};
+const playForFunctionScenario = Scenarist ( scenario );
+
+playForFunctionScenario ( ... order );
+
+const objectScenario = {
+
+$stringScenario1: "Hello World! This is Faddy's Scenarist in solidarity with the People of Palestine, Gaza specifically, against israel till whole land is free!",
+$numberScenario1: 10.07,
+$booleanScenario1: true,
+
+$functionScenario1 ( playForObjectScenario, ... order ) {
+
+const objectScenario = this;
+
+},
+
+$objectScenario1: {
+
+$objectScenario1_StringScenario1: "Hello World! This is Faddy's Scenarist from nested object scenario still in solidarity with the People of Palestine, Gaza specifically, against israel till whole land is free!",
+$objectScenario1_NumberScenario1: 1973,
+$objectScenario1_BooleanScenario1: true,
+
+$objectScenario1_FunctionScenario1 ( playForObjectScenario1, ... order ) {
+
+const objectScenario1 = this;
+
+},
+
+$objectScenario1_objectScenario1: {
+
+// ... nesting scenarios can go deeper and deeper
+
+}
+
+}
+
+};
+const playForObjectScenario = Scenarist ( objectScenario );
+
+};
+
+```
+
+## When Calling Scenarist
+
+Before Scenarist start playing directions, it makes sure that it's bound to a story object.
+The Story is where Scenarist lives.
+This is done by checking for the value of the story's property whose key is set to the secret story symbol.
+If the value is not set to true, Scenarist will create a play function in case a scenario is provided as the first parameter.
+
+*/
+
+if ( ! this ?.[ _ .story ] )
+
+/*
+
+### Creating a New Play
+
+The scenario is passed as the first parameter to Scenarist.
+A scenario must either be function or object.
+
+*/
 
 if ( [ 'object', 'function' ] .includes ( typeof order [ 0 ] ) ) {
+
+/*
+
+#### Binding Scenarist to a Story
+
+The play is created by binding Scenarist to a story object.
+Contents of story objects are as follows:
+
+*/
 
 const production = {};
 let play = Scenarist .bind ( {
 
-[ $ .play ]: true,
+// - The value of the property whose key is the secret story symbol is set to true, this way Scenarist knows that it's bound to a story and can play directions within a scenario.
+
+[ _ .story ]: true,
+
+// - The plot of a story holds all the nested scenario directions; it can be considered as a cache for it's nested scenarios. Refer to the Nested Scenario Directions section for more information.
+
 plot: new Map (),
+
+// - The production object which controls how Scenarist plays directions within the scenario.
+
 production
 
 } );
 
+/*
+
+#### Initializing the production object
+
+A new scenario's production will be initialized with the following content:
+
+*/
+
 Object .assign ( production, {
 
+// - A reference to the play function.
+
 play,
-stamp: order [ 1 ] ?.stamp || Symbol .for ( 'scenarist.dev/stamp' ),
+
+// - The scenario passed as the first parameter.
+
 scenario: order [ 0 ],
+
+// - The stamp used to access the production object. It can either be provided as a property of the optional object, passed as the second parameter, named stamp or it will be assigned a new unique symbol value.
+
+stamp: order [ 1 ] ?.stamp || Symbol ( 'scenarist/stamp/' ),
+
+// - A reference to the play that played this scenario.
+
 player: order [ 1 ] ?.player,
+
+// - A reference to the pilot play which is the root for all the played scenarios.
+
 pilot: order [ 1 ] ?.pilot || play,
-location: order [ 1 ] ?.[ $ .location ] || [],
-setting: order [ 1 ] ?.[ $ .setting ]
+
+// - The location at which the scenario is played.
+
+location: order [ 1 ] ?.[ _ .location ] || [],
+
+// - The setting which is the production for the playing scenario. It can be changed later on to play the same scenario within a different production.
+
+setting: order [ 1 ] ?.[ _ .setting ]
 
 } );
 
 play = Object .defineProperties ( play, {
 
-name: { value: 'scenarist.dev/play' },
-[ Symbol .for ( 'playable' ) ]: { value: true }
+name: { value: 'scenarist/play' },
+[ $ ( 'playable' ) ]: { value: true }
 
 } );
 
+if ( typeof production .player !== 'function' )
+production .player = play;
+
 if ( production .scenario .$_producer !== undefined )
-play ( Symbol .for ( 'producer' ), production );
+await play ( $ ( 'producer' ), production );
 
 return play;
 
@@ -43,15 +219,26 @@ else
 throw TypeError ( "Scenarist: 'scenario' must be either an 'object' or 'function'." );
 
 let { production, plot } = this;
+
 let { play, stamp, scenario, location, player, pilot, setting } = production;
 let [ direction ] = order;
 let conflict, $direction;
 
 if ( direction === stamp )
-return production;
+return {
+
+play,
+resolution: production
+
+};
 
 else if ( typeof scenario === 'function' )
-return scenario .call ( setting ?.scenario || player ( stamp ) .scenario, setting ?.play || player, ... order );
+return {
+
+play,
+resolution: scenario .call ( setting ?.scenario || await player ( stamp ) .scenario, setting ?.play || player, ... order )
+
+};
 
 else if (
 
@@ -84,7 +271,7 @@ order .shift ();
 else if ( typeof scenario .$_director !== undefined ) {
 
 conflict = scenario .$_director;
-direction = Symbol .for ( 'director' );
+direction = $ ( 'director' );
 
 }
 
@@ -93,7 +280,7 @@ throw Object .assign ( Error ( `Unknown direction: [ ${ [ ... location, directio
 
 direction,
 location,
-code: Symbol .for ( 'senarist.dev/error/unknown-direction' )
+code: $ ( 'senarist/error/unknown-direction' )
 
 } );
 
@@ -103,37 +290,38 @@ case 'object':
 case 'function':
 
 if ( ! conflict )
-return;
+return {
+
+play,
+resolution: conflict
+
+};
 
 if ( ! plot .get ( conflict ) )
-plot .set ( conflict, Scenarist ( conflict, {
+plot .set ( conflict, await Scenarist ( conflict, {
 
 stamp,
 player: play,
 pilot,
-[ $ .location ]: [ ... location, direction ],
-[ $ .setting ]: setting
+[ _ .location ]: [ ... location, direction ],
+[ _ .setting ]: setting
 
 } ) );
 
 play = plot .get ( conflict );
 
 if ( typeof conflict === 'object' )
-play ( stamp ) .location = [ ... location, direction ];
+( await play ( stamp ) ) .location = [ ... location, direction ];
 
 return play ( ... order );
 
 }
 
-return conflict;
+return {
+
+play,
+resolution: conflict
 
 };
-
-const $ = {
-
-stamp: Symbol ( 'senarist.dev/stamp' ),
-play: Symbol ( 'senarist.dev/$play' ),
-location: Symbol ( 'senarist.dev/$location' ),
-setting: Symbol ( 'scenarist.dev/setting' )
 
 };

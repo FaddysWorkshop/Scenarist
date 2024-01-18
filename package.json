@@ -1,17 +1,17 @@
 {
-  "name": "scenarist.dev",
-  "version": "0.6.0",
-  "description": "For writing playable scenarios",
+  "name": "@faddys/scenarist",
+  "version": "1.0.0",
+  "description": "For Writing Playable Scenarios",
   "type": "module",
   "exports": "./index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scenarist-dev/scenarist.git"
+    "url": "git+https://github.com/FaddysWorkshop/scenarist.git"
   },
-  "author": "Faddy Michel <faddy@scenarist.dev>",
+  "author": "Faddy Michel <workshop@faddys.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/scenarist-dev/scenarist/issues"
+    "url": "https://github.com/FaddysWorkshop/scenarist/issues"
   },
-  "homepage": "https://github.com/scenarist-dev/scenarist#readme"
+  "homepage": "https://github.com/FaddysWorkshop/scenarist#readme"
 }
