@@ -1,7 +1,7 @@
 /*
 
 # Faddy's Scenarist
-## Vanilla JavaScript Framework for Writing Playable and Recursive Scenarios
+## Vanilla JavaScript Framework for Writing Recursive, Displayable and Playable Scenarios
 
 As a blind person,
 who also experienced different levels of vision in the past,
@@ -20,12 +20,6 @@ Vanilla JavaScript was chosen to be the language of Scenarist for the following 
 
 This file contains the code of Scenarist and detailed explanation of it's logic.
 
-## Private Constants
-
-The following object contains secret symbols used through out the code.
-This way Scenarist is guaranteed to play in directions private to it.
-Every time a secret symbol from this object is used in the code, an explanation of it's purpose will be provided.
-
 */
 
 const _ = {
@@ -38,84 +32,25 @@ setting: Symbol ( 'scenarist/$setting' )
 
 /*
 
-The $ (dollar sign) is used as an alias for the Symbol .for function through out the code.
+The `_` object contains secret symbols used through out the code.
+This way Scenarist and it's $s are guaranteed to $ in directions private to it.
+Every time a secret symbol from this object is used in the code, an explanation of it's purpose will be provided.
 
 */
 
-const $ = Symbol .for;
-
-/*
-
-The module exports only the Scenarist function.
-
-*/
 
 export default async function Scenarist ( ... order ) {
 
 /*
 
-Scenarist can then be imported as follows:
+The module exports only the `Scenarist` asynchronous function.
+Meaning that Scenarist can be imported as follows:
 
 ```js
 import Scenarist from '@faddys/scenarist';
-
-const stamp = Symbol ( "Faddy's Stamp" );
-const functionScenario = function ( playForFunctionScenario, ... order ) {
-
-const functionScenario = this;
-const production = playForFunctionScenario ( stamp );
-const { stamp, location,
-
-};
-const playForFunctionScenario = Scenarist ( scenario );
-
-playForFunctionScenario ( ... order );
-
-const objectScenario = {
-
-$stringScenario1: "Hello World! This is Faddy's Scenarist in solidarity with the People of Palestine, Gaza specifically, against israel till whole land is free!",
-$numberScenario1: 10.07,
-$booleanScenario1: true,
-
-$functionScenario1 ( playForObjectScenario, ... order ) {
-
-const objectScenario = this;
-
-},
-
-$objectScenario1: {
-
-$objectScenario1_StringScenario1: "Hello World! This is Faddy's Scenarist from nested object scenario still in solidarity with the People of Palestine, Gaza specifically, against israel till whole land is free!",
-$objectScenario1_NumberScenario1: 1973,
-$objectScenario1_BooleanScenario1: true,
-
-$objectScenario1_FunctionScenario1 ( playForObjectScenario1, ... order ) {
-
-const objectScenario1 = this;
-
-},
-
-$objectScenario1_objectScenario1: {
-
-// ... nesting scenarios can go deeper and deeper
-
-}
-
-}
-
-};
-const playForObjectScenario = Scenarist ( objectScenario );
-
-};
-
 ```
 
-## When Calling Scenarist
-
-Before Scenarist start playing directions, it makes sure that it's bound to a story object.
-The Story is where Scenarist lives.
-This is done by checking for the value of the story's property whose key is set to the secret story symbol.
-If the value is not set to true, Scenarist will create a play function in case a scenario is provided as the first parameter.
+All the parameters passed to the function is kept in the `order` array.
 
 */
 
@@ -123,10 +58,41 @@ if ( ! this ?.[ _ .story ] )
 
 /*
 
-### Creating a New Play
+`Scenarist` and the `$` functions it produces are the same function at the end.
+They only differ is that the `this` keyword, in case of `Scenarist`, is not assigned a story object; acting as the environment where a scenario occurs.
+`Scenarist` checks if it's free or inside a `$` by checking 
+
+Before Scenarist start $ing directions, it makes sure that it's bound to a story object.
+The Story is where Scenarist lives.
+This is done by checking for the value of the story's property whose key is set to the secret story symbol.
+If the value is not set to true, Scenarist will create a $ function in case a scenario is provided as the first parameter.
+
+*/
+
+if ( ! this ?.[ _ .story ] )
+
+/*
 
 The scenario is passed as the first parameter to Scenarist.
-A scenario must either be function or object.
+A scenario must either be object (recursive):
+
+```js
+const $ = Scenarist ( {
+
+// Recursive Scenario
+
+} );
+```
+
+Or, function (playable):
+
+```js
+const $ = Scenarist ( function scenario ( $, ... directions ) {
+
+// Playable Scenario
+
+} );
+```
 
 */
 
@@ -134,25 +100,23 @@ if ( [ 'object', 'function' ] .includes ( typeof order [ 0 ] ) ) {
 
 /*
 
-#### Binding Scenarist to a Story
-
-The play is created by binding Scenarist to a story object.
-Contents of story objects are as follows:
+The $ is created by binding Scenarist to a story object (the `this` keyword will be assigned this value).
+Contents of the story object are as follows:
 
 */
 
 const production = {};
-let play = Scenarist .bind ( {
+let $ = Scenarist .bind ( {
 
-// - The value of the property whose key is the secret story symbol is set to true, this way Scenarist knows that it's bound to a story and can play directions within a scenario.
+// - The value of the property whose key is the secret story symbol is set to true, this way Scenarist knows that it's bound to a story and can $ directions within a scenario.
 
 [ _ .story ]: true,
 
-// - The plot of a story holds all the nested scenario directions; it can be considered as a cache for it's nested scenarios. Refer to the Nested Scenario Directions section for more information.
+// - The plot of a story holds all the nested scenario directions; it can be considered as a cache for it's nested scenarios.
 
 plot: new Map (),
 
-// - The production object which controls how Scenarist plays directions within the scenario.
+// - The production object which controls how Scenarist $s directions within the scenario.
 
 production
 
@@ -160,19 +124,17 @@ production
 
 /*
 
-#### Initializing the production object
-
-A new scenario's production will be initialized with the following content:
+Also, A new scenario's production object will be initialized with the following content:
 
 */
 
 Object .assign ( production, {
 
-// - A reference to the play function.
+// - A reference to the $ function.
 
-play,
+$,
 
-// - The scenario passed as the first parameter.
+// - The scenario.
 
 scenario: order [ 0 ],
 
@@ -180,63 +142,86 @@ scenario: order [ 0 ],
 
 stamp: order [ 1 ] ?.stamp || Symbol ( 'scenarist/stamp/' ),
 
-// - A reference to the play that played this scenario.
+// - A reference to the $ that $ed this scenario (undefined in case of root scenarios).
 
-player: order [ 1 ] ?.player,
+$er: order [ 1 ] ?.$er,
 
-// - A reference to the pilot play which is the root for all the played scenarios.
+// - A reference to the pilot $ which is the root for all the $ed scenarios (undefined in case of the root scenario).
 
-pilot: order [ 1 ] ?.pilot || play,
+pilot: order [ 1 ] ?.pilot || $,
 
-// - The location at which the scenario is played.
+// - The location at which the scenario is $ed (empty array in case of root scenarios, and in case of nested scenarios, it'll be filled with the directions that lead to this scenario).
 
 location: order [ 1 ] ?.[ _ .location ] || [],
 
-// - The setting which is the production for the playing scenario. It can be changed later on to play the same scenario within a different production.
+// - The setting which is the production for the $ing scenario. It can be changed later on to $ the same scenario within a different production.
 
 setting: order [ 1 ] ?.[ _ .setting ]
 
 } );
 
-play = Object .defineProperties ( play, {
+Object .defineProperty ( $, 'name', { value: 'scenarist/$' } );
 
-name: { value: 'scenarist/play' },
-[ $ ( 'playable' ) ]: { value: true }
+// Note: The name property of the newly created $ function is modified for debugging purposes; like when using `console .log ( $ )` to print the function showing it's name.
+
+/*
+
+Now, the new $ function is ready.
+Before returning it, the producer symbol direction will be called with the production object passed as a parameter.
+
+```js
+const $ = Scenarist ( {
+
+$_producer ( $, production ) {
+
+// This function is executed upon creation of the $ function for this scenario.
+
+},
+
+// ... Other directions in this scenario can be written here
 
 } );
+```
 
-if ( typeof production .player !== 'function' )
-production .player = play;
+*/
 
-if ( production .scenario .$_producer !== undefined )
-await play ( $ ( 'producer' ), production );
+if ( production .scenario .$_producer )
+await $ ( Symbol .for ( 'producer' ), production );
 
-return play;
+return $;
+
+// The logic of the `Scenarist` function ends here by returning the `$` function created for the passed scenario.
 
 }
 
 else
 throw TypeError ( "Scenarist: 'scenario' must be either an 'object' or 'function'." );
 
+/*
+
+/*
+
+The logic of the `$` function starts here;
+meaning that a direction in this scenario is about to be $ed.
+
+Note: The `$` function is the `Scenarist` function but bound to a story object. So, it can not be used to create new $s other than the nested $s created in case of recursive scenarios.
+
+*/
+
 let { production, plot } = this;
 
-let { play, stamp, scenario, location, player, pilot, setting } = production;
+let { $, stamp, scenario, location, $er, pilot, setting } = production;
+
+// Retrieve the direction from the order; which is the array containing all the parameters passed to the $ function.
+
 let [ direction ] = order;
 let conflict, $direction;
 
 if ( direction === stamp )
 return {
 
-play,
+$,
 resolution: production
-
-};
-
-else if ( typeof scenario === 'function' )
-return {
-
-play,
-resolution: scenario .call ( setting ?.scenario || await player ( stamp ) .scenario, setting ?.play || player, ... order )
 
 };
 
@@ -268,10 +253,18 @@ order .shift ();
 
 }
 
+else if ( typeof scenario === 'function' )
+return {
+
+$,
+resolution: await scenario .call ( setting ?.scenario || ( await ( typeof $er === 'function' ? $er : $ ) ( stamp ) ) .resolution .scenario, setting ?.$ || $er, ... order )
+
+};
+
 else if ( typeof scenario .$_director !== undefined ) {
 
 conflict = scenario .$_director;
-direction = $ ( 'director' );
+direction = Symbol .for ( 'director' );
 
 }
 
@@ -280,7 +273,7 @@ throw Object .assign ( Error ( `Unknown direction: [ ${ [ ... location, directio
 
 direction,
 location,
-code: $ ( 'senarist/error/unknown-direction' )
+code: Symbol .for ( 'senarist/error/unknown-direction' )
 
 } );
 
@@ -292,7 +285,7 @@ case 'function':
 if ( ! conflict )
 return {
 
-play,
+$,
 resolution: conflict
 
 };
@@ -301,25 +294,25 @@ if ( ! plot .get ( conflict ) )
 plot .set ( conflict, await Scenarist ( conflict, {
 
 stamp,
-player: play,
+$er: $,
 pilot,
 [ _ .location ]: [ ... location, direction ],
 [ _ .setting ]: setting
 
 } ) );
 
-play = plot .get ( conflict );
+$ = plot .get ( conflict );
 
 if ( typeof conflict === 'object' )
-( await play ( stamp ) ) .location = [ ... location, direction ];
+( await $ ( stamp ) ) .location = [ ... location, direction ];
 
-return play ( ... order );
+return $ ( ... order );
 
 }
 
 return {
 
-play,
+$,
 resolution: conflict
 
 };
