@@ -2,11 +2,11 @@
 
 ## Installing and Importing Faddy's Scenarist
 
-Scenarist is a JavaScript function exported as a default for the '@faddys/scenarist' module.
-The module is available as a package in NPM, where the type of this package is set as module in the package.json file.
-To install the module, the following command can be run from the directory of the project that desirs to use Scenarist:
+`Scenarist` is a JavaScript asynchronous function exported as a default for the '@faddys/scenarist' module.
+The module is available as a package in NPM.
+To install the module, the `npm` command can be run from the directory of the project that desirs to use Scenarist as follows:
 
-```bash
+```sh
 npm i @faddys/scenarist
 ```
 
@@ -16,37 +16,27 @@ Then, to import the module from the JavaScript code:
 import Scenarist from '@faddys/scenarist';
 ```
 
-## Play
+## How to Create Scenarist's Plays?
 
-Scenarist can be called to create a play function for a scenario passed as the first parameter:
+`Scenarist` can be called to create a `play` function for a scenario passed as the first parameter:
 
 ```js
 import Scenarist from '@faddys/scenarist';
 
 // Get a scenario someway and provide it to Scenarist to create a new play for that scenario:
 
-const play = Scenarist ( scenario );
+const play = await Scenarist ( scenario );
 ```
 
-## How to Write and Play Scenario Directions from a Scenarist's Play
+## How to Write Scenarios for Scenarist and Play It's Directions?
 
-The `play` function can be called to play different directions from the scenario passed to Scenarist upon creation based on the parameters passed to it.
+The `scenario`, passed to `Scenarist` to create the `play`, can either be an object or function.
 
-The passed scenario can either be a function or object.
+### Writing Object Scenarios
 
-### Playing Directions from a Scenario Function
-
-If the scenario is a function,
-
-### Playing Directions from a Scenario Object
-
-If the scenario is an object, a property within this scenario (not just the owned ones) is considered a direction if the property's name starts with a $ (dollar sign).
-A direction name, to be passed as the first parameter to the play function, can either be a string or symbol.
-
-#### String Direction Name
-
-String direction name is written by prefixing the name of the property representing the direction in the scenario object with a `$` (dollar sign).
-For example, if we want to write a scenario having a direction named `'hello'`, and then play it by passing the direction name as the first parameter to the play function:
+If the `scenario` is an object,
+a property within this scenario (not just the owned ones) is considered a direction if the property's name starts with a `$` (dollar sign).
+For example, if we want to write a scenario having a direction that can be played by passing the string `'hello'` to the `play` function:
 
 ```js
 import Scenarist from '@faddys/scenarist';
@@ -57,7 +47,7 @@ const scenario = {
 
 $hello () {
 
-console .log ( "Hello World! This is Faddy's Scenarist!" );
+console .log ( "Hello World! This is Faddy's Scenarist in solidarity with The People of Palestine against israel till whole land is FREE!" );
 
 }
 
@@ -65,34 +55,27 @@ console .log ( "Hello World! This is Faddy's Scenarist!" );
 
 // Let Scenarist create the play function for that scenario:
 
-const play = Scenarist ( scenario );
+const play = await Scenarist ( scenario );
 
 // Play the 'hello' direction:
 
-play ( 'hello' ); // The 'hello' direction is called!
+await play ( 'hello' ); // The 'hello' direction is called!
 
 // Output on console:
+
 /*
-Hello World! This is Faddy's Scenarist!
+Hello World! This is Faddy's Scenarist in solidarity with The People of Palestine against israel till whole land is FREE!
 */
 ```
 
-#### Symbol Direction Name
-
-Symbol direction name is written by prefixing the name of the property representing the direction in the scenario object with a `$_` (dollar sign followed by underscore).The direction can then be played by calling the play function while providing the symbol returned from calling `Symbol .for ( directionName )`, where `directionName` is the variable having the value of the direction name.
+If the name of a property of the `scenario` object is prefixed by `$_` (dollar sign followed by underscore),
+the direction can then be played by calling the `play` function while providing the symbol returned from calling `Symbol .for ( directionName )`, where `directionName` is the variable having the value of the direction name.
+For example:
 
 ```js
 import Scenarist from '@faddys/scenarist';
 
 const scenario = {
-
-// Since the desired string direction name is 'hello', add a property to the scenario object and name it $hello:
-
-$hello () {
-
-console .log ( "Hello World! This is Faddy's Scenarist greeting you from a direction having a string name!" );
-
-},
 
 // Since the desired symbol direction name is 'hello', add a property to the scenario object and name it $_hello:
 
@@ -106,63 +89,60 @@ console .log ( "Hello World! This is Faddy's Scenarist greeting you from a direc
 
 // Let Scenarist create the play function for that scenario:
 
-const play = Scenarist ( scenario );
-
-// Play the 'hello' string direction:
-
-play ( 'hello' );
+const play = await Scenarist ( scenario );
 
 // Play the 'hello' symbol direction:
 
 play ( Symbol .for ( 'hello' ) );
 
 // Output on console:
+
 /*
 Hello World! This is Faddy's Scenarist greeting you from a direction having a string name!
 Hello World! This is Faddy's Scenarist greeting you from a direction having a symbol name!
 */
 ```
 
-#### Straight Directions
-
-If the value of the property, in case it is a scenario direction, is `'string'`, `'number'`, `'boolean'` or `'symbol'`, the value will be returned directly.
-For example, let's write a scenario that illustrates how straight directions is written:
+If the value of the property, in case it is direction within a `scenario`, is `'string'`, `'number'`, `'boolean'` or `'symbol'`,
+the value will be returned directly when the direction is played.
+For example:
 
 ```js
 import Scenarist from '@faddys/scenarist';
 
 // Let Scenarist create the play function for the following scenario having only straight directions:
 
-const play = Scenarist ( {
+const play = await Scenarist ( {
 
-// Example for a straight direction named 'Palestine' and directs to a symbol:
+// Example for a direction named 'Palestine' and directs to a symbol:
 
 $Palestine: Symbol .for ( 'RESISTANCE Till Whole Land is FREE!' ),
 
-// Example for a straight direction named 'israel' and directs to a boolean
+// Example for a direction named 'israel' and directs to a boolean
 
 $israel: false,
 
-// Example for a straight direction named 'question' and directs to a string
+// Example for a direction named 'question' and directs to a string
 
-$question: 'Why israel?',
+$question: "Why israel?",
 
-// Example for a straight direction named 'resistance' and directs to a number
+// Example for a direction named 'resistance' and directs to a number
 
 $resistance: 10.07
 
 } );
 
-// Play the different straight directions that we wrote above and log the values, they direct to to, the console
+// now, play the different directions that we wrote above and log the values, they direct to
 
 for ( const direction of [ 'resistance', 'Palestine', 'question', 'israel' ] )
 console .log (
 
-direction + ': ', play ( direction )
+`${ direction }: ${ ( await play ( direction ) ) .resolution }`
 
 );
 
 // Output on console:
+
 /*
 resistance:  10.07
 Palestine:  Symbol(RESISTANCE Till Whole Land is FREE!)
@@ -171,28 +151,15 @@ israel:  false
 */
 ```
 
-#### Scenario Directions
-
-If the type of the property (in case it is a direction) is object, then the direction is pointing to a nested play whose scenario is that object.
-For example, let's write a play whose scenario has directions pointing to nested plays:
+If the type of the property (in case it is a direction) is a function,
+the function will be called and the rest of the parameters that were passed to the play function will be passed to that called function along with a reference to the `play` function passed as the first parameter.
+For example:
 
 ```js
 import Scenarist from '@faddys/scenarist';
 
-const play = Scenarist ( {
 
-$Palestine: {
+```
 
-
-
-},
-$israel: {
-
-
-
-}
-
-} );
-
-If the type of the property (in case it is a direction) is a function, the function will be called and the rest of the parameters that were passed to the play function will be passed to that called function.
-
+If the type of the property (in case it is a direction) is object, then the direction is pointing to a nested play whose scenario is that object.
+For example, let's write a play whose scenario has directions pointing to nested plays:

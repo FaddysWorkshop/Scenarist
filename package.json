@@ -1,14 +1,14 @@
 {
   "name": "@faddys/scenarist",
   "version": "1.0.0",
-  "description": "For Writing Playable Scenarios",
+  "description": "Faddy's Scenarist for Writing Playable Scenarios",
   "type": "module",
   "exports": "./index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FaddysWorkshop/scenarist.git"
   },
-  "author": "Faddy Michel <workshop@faddys.io>",
+  "author": "Faddy Michel <faddy.michel@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/FaddysWorkshop/scenarist/issues"
