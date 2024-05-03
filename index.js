@@ -142,15 +142,15 @@ scenario: order [ 0 ],
 
 stamp: order [ 1 ] ?.stamp || Symbol ( 'scenarist/stamp/' ),
 
-// - A reference to the $ that $ed this scenario (undefined in case of root scenarios).
+// - A reference to the $ that played this scenario (undefined in case of root scenarios).
 
-$er: order [ 1 ] ?.$er,
+player: order [ 1 ] ?.player,
 
-// - A reference to the pilot $ which is the root for all the $ed scenarios (undefined in case of the root scenario).
+// - A reference to the pilot $ which is the root for all the played scenarios (undefined in case of the root scenario).
 
 pilot: order [ 1 ] ?.pilot || $,
 
-// - The location at which the scenario is $ed (empty array in case of root scenarios, and in case of nested scenarios, it'll be filled with the directions that lead to this scenario).
+// - The location at which the scenario is played (empty array in case of root scenarios, and in case of nested scenarios, it'll be filled with the directions that lead to this scenario).
 
 location: order [ 1 ] ?.[ _ .location ] || [],
 
@@ -202,7 +202,7 @@ throw TypeError ( "Scenarist: 'scenario' must be either an 'object' or 'function
 /*
 
 The logic of the `$` function starts here;
-meaning that a direction in this scenario is about to be $ed.
+meaning that a direction in this scenario is about to be played.
 
 Note: The `$` function is the `Scenarist` function but bound to a story object. So, it can not be used to create new $s other than the nested $s created in case of recursive scenarios.
 
@@ -210,7 +210,7 @@ Note: The `$` function is the `Scenarist` function but bound to a story object. 
 
 let { production, plot } = this;
 
-let { $, stamp, scenario, location, $er, pilot, setting } = production;
+let { $, stamp, scenario, location, player, pilot, setting } = production;
 
 // Retrieve the direction from the order; which is the array containing all the parameters passed to the $ function.
 
@@ -218,12 +218,7 @@ let [ direction ] = order;
 let conflict, $direction;
 
 if ( direction === stamp )
-return {
-
-$,
-resolution: production
-
-};
+return production;
 
 else if (
 
@@ -254,12 +249,7 @@ order .shift ();
 }
 
 else if ( typeof scenario === 'function' )
-return {
-
-$,
-resolution: await scenario .call ( setting ?.scenario || ( await ( typeof $er === 'function' ? $er : $ ) ( stamp ) ) .resolution .scenario, setting ?.$ || $er, ... order )
-
-};
+return await scenario .call ( setting ?.scenario || ( await ( typeof player === 'function' ? player : $ ) ( stamp ) ) .scenario, ( setting ?.$ || player ) || $, ... order );
 
 else if ( typeof scenario .$_director !== undefined ) {
 
@@ -283,18 +273,13 @@ case 'object':
 case 'function':
 
 if ( ! conflict )
-return {
-
-$,
-resolution: conflict
-
-};
+return conflict;
 
 if ( ! plot .get ( conflict ) )
 plot .set ( conflict, await Scenarist ( conflict, {
 
 stamp,
-$er: $,
+player: $,
 pilot,
 [ _ .location ]: [ ... location, direction ],
 [ _ .setting ]: setting
@@ -310,11 +295,6 @@ return $ ( ... order );
 
 }
 
-return {
-
-$,
-resolution: conflict
-
-};
+return conflict;
 
 };

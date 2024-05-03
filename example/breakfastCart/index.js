@@ -1,26 +1,27 @@
 import Scenarist from '@faddys/scenarist';
-import { createInterface } from 'readline/promises';
-import { stdin as input, stdout as output } from 'process';
+import { createInterface } from 'node:readline/promises';
+import { stdin as input, stdout as output } from 'node:process';
 
-const $ = Symbol .for;
-const $cart = await Scenarist ( Object .assign ( async function FaddysBreakfastCart ( $cart ) {
+const $$ = Symbol .for;
+
+await Scenarist ( Object .assign ( async function FaddysBreakfastCart ( $ ) {
 
 const cart = this;
 const { order, cli } = cart;
-const { resolution: selection } = await $cart ( $ ( 'selection' ) );
+const selection = await $ ( $$ ( 'selection' ) );
 
 if ( ! selection )
-return $cart ( $ ( 'close' ) );
+return $ ( $$ ( 'close' ) );
 
-const { resolution: answer } = await $cart ( $ ( 'ask' ) );
+const answer = await $ ( $$ ( 'ask' ) );
 
 if ( answer > 0 && answer <= selection .answers .length )
-$cart ( $ ( 'add' ) );
+$ ( $$ ( 'add' ) );
 
 else
-$cart ( $ ( 'repeat' ) );
+$ ( $$ ( 'repeat' ) );
 
-return $cart ();
+return $ ();
 
 }, {
 
@@ -98,8 +99,8 @@ console .log ( item + ':', order [ item ] );
 
 cli .close ();
 
-}
+},
+
+$_producer ( $ ) { $ () }
 
 } ) );
-
-$cart ();

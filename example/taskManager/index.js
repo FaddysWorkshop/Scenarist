@@ -4,7 +4,7 @@ import { stdin as input, stdout as output } from 'process';
 
 const cli = createInterface ( { input, output } );
 const tasks = [];
-const play = Scenarist ( ( play, ... directions ) => {
+const play = await Scenarist ( ( play, ... directions ) => {
 
 let task, id;
 
