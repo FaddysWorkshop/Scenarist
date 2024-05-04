@@ -209,7 +209,6 @@ Note: The `$` function is the `Scenarist` function but bound to a story object. 
 */
 
 let { production, plot } = this;
-
 let { $, stamp, scenario, location, player, pilot, setting } = production;
 
 // Retrieve the direction from the order; which is the array containing all the parameters passed to the $ function.
@@ -248,8 +247,15 @@ order .shift ();
 
 }
 
-else if ( typeof scenario === 'function' )
+else if ( typeof scenario === 'function' ) {
+
+if ( scenario !== scenario ?.prototype ?.constructor )
 return await scenario .call ( setting ?.scenario || ( await ( typeof player === 'function' ? player : $ ) ( stamp ) ) .scenario, ( setting ?.$ || player ) || $, ... order );
+
+else
+return await Scenarist ( new scenario ( ... order ) );
+
+}
 
 else if ( typeof scenario .$_director !== undefined ) {
 
