@@ -146,7 +146,7 @@ stamp: order [ 1 ] ?.stamp || Symbol ( 'scenarist/stamp/' ),
 
 player: order [ 1 ] ?.player,
 
-// - A reference to the pilot $ which is the root for all the played scenarios (undefined in case of the root scenario).
+// - A reference to the pilot $ which is the root for all the played scenarios
 
 pilot: order [ 1 ] ?.pilot || $,
 
@@ -253,7 +253,15 @@ if ( scenario !== scenario ?.prototype ?.constructor )
 return await scenario .call ( setting ?.scenario || ( await ( typeof player === 'function' ? player : $ ) ( stamp ) ) .scenario, ( setting ?.$ || player ) || $, ... order );
 
 else
-return await Scenarist ( new scenario ( ... order ) );
+return await Scenarist ( new scenario ( ... order ), {
+
+stamp,
+player: $,
+pilot: player === undefined ? undefined : pilot,
+[ _ .location ]: [ ... location, direction ],
+[ _ .setting ]: setting
+
+} );
 
 }
 
