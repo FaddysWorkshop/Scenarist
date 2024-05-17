@@ -24,9 +24,10 @@ This file contains the code of Scenarist and detailed explanation of it's logic.
 
 const _ = {
 
-story: Symbol ( 'senarist/$story' ),
-location: Symbol ( 'senarist/$location' ),
-setting: Symbol ( 'scenarist/$setting' )
+signature: Symbol ( '@faddys/scenarist/signature' ),
+story: Symbol ( '@faddys/scenarist/story' ),
+location: Symbol ( '@faddys/scenarist/location' ),
+setting: Symbol ( '@faddys/scenarist/setting' )
 
 };
 
@@ -140,7 +141,7 @@ scenario: order [ 0 ],
 
 // - The stamp used to access the production object. It can either be provided as a property of the optional object, passed as the second parameter, named stamp or it will be assigned a new unique symbol value.
 
-stamp: order [ 1 ] ?.stamp || Symbol ( 'scenarist/stamp/' ),
+stamp: order [ 1 ] ?.stamp || Symbol ( '@faddys/scenarist/stamp/' ),
 
 // - A reference to the $ that played this scenario (undefined in case of root scenarios).
 
@@ -160,7 +161,12 @@ setting: order [ 1 ] ?.[ _ .setting ]
 
 } );
 
-Object .defineProperty ( $, 'name', { value: 'scenarist/$' } );
+Object .defineProperties ( $, {
+
+name: { value: '@faddys/scenarist' },
+[ Symbol .for ( '@faddys/scenarist' ) ]: { value: signature => signature === _ .signature ? true : false }
+
+} );
 
 // Note: The name property of the newly created $ function is modified for debugging purposes; like when using `console .log ( $ )` to print the function showing it's name.
 
@@ -249,10 +255,7 @@ order .shift ();
 
 else if ( typeof scenario === 'function' ) {
 
-if ( scenario !== scenario ?.prototype ?.constructor )
-return await scenario .call ( setting ?.scenario || ( await ( typeof player === 'function' ? player : $ ) ( stamp ) ) .scenario, ( setting ?.$ || player ) || $, ... order );
-
-else
+if ( scenario === scenario ?.prototype ?.constructor )
 return await Scenarist ( new scenario ( ... order ), {
 
 stamp,
@@ -262,6 +265,15 @@ pilot: player === undefined ? undefined : pilot,
 [ _ .setting ]: setting
 
 } );
+
+else {
+
+if ( typeof scenario [ Symbol .for ( '@faddys/scenarist' ) ] !== 'function' || ! scenario [ Symbol .for ( '@faddys/scenarist' ) ] ( _ .signature ) )
+order .unshift ( ( setting ?.$ || player ) || $ );
+
+return await scenario .call ( setting ?.scenario || ( await ( typeof player === 'function' ? player : $ ) ( stamp ) ) .scenario, ... order );
+
+}
 
 }
 
