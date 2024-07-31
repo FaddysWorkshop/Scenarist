@@ -2,16 +2,18 @@
   "name": "@faddys/scenarist",
   "version": "2.2.0",
   "description": "Faddy's Scenarist for Writing Playable Scenarios",
-  "type": "module",
-  "exports": "./index.js",
+  "exports": {
+    "import": "./index.mjs",
+    "require": "./index.cjs"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FaddysWorkshop/scenarist.git"
+    "url": "git+https://github.com/FaddysWorkshop/Scenarist.git"
   },
   "author": "Faddy Michel <faddy.michel@gmail.com>",
-  "license": "MIT",
+  "license": "Unlicense",
   "bugs": {
-    "url": "https://github.com/FaddysWorkshop/scenarist/issues"
+    "url": "https://github.com/FaddysWorkshop/Scenarist/issues"
   },
-  "homepage": "https://github.com/FaddysWorkshop/scenarist#readme"
+  "homepage": "https://github.com/FaddysWorkshop/Scenarist#readme"
 }

@@ -1,24 +1,33 @@
-import Scenarist from '../index.mjs';
+import Scenarist from '@faddys/scenarist';
 
-const scenarist = await Scenarist ( new class Greeter {
+const scenario = {
 
+greeting: 'Hello',
+$greeting ( scenarist, ... greeting ) {
+
+this .greeting = ( greeting .join ( ' ' ) ) .length ? greeting : this .greeting;
+
+return scenarist ();
+
+},
+
+name: 'World',
 $name ( scenarist, ... name ) {
 
-this .name = name .join ( ' ' );
+this .name = ( name = name .join ( ' ' ) ) .length ? name : this .name;
+
+return scenarist ();
+
+},
+
+$_introduction: "This is Faddy's Scenarist in Solidarity with The People of Palestine till Their Whole Land is FREE!",
+
+async $_director ( scenarist ) {
+
+return `${ this .greeting } ${ this .name }! ${ await scenarist( Symbol .for ( 'introduction' ) ) }`;
 
 }
 
-async $_producer ( scenarist ) {
+};
 
-await scenarist ( 'name', ... process .argv .slice ( 2 ) );
-await scenarist ();
-
-}
-
-$_director () {
-
-console .log ( `Hello ${ this .name || 'World' }! This is Faddy's Scenarist in Solidarity with The People of Palestine till Their Whole Land is FREE!` );
-
-}
-
-} );
+export default scenario;
