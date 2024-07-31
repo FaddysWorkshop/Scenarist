@@ -256,11 +256,11 @@ order .shift ();
 else if ( typeof scenario === 'function' ) {
 
 if ( scenario === scenario ?.prototype ?.constructor )
-return await Scenarist ( new scenario ( ... order ), {
+return await Scenarist ( scenario [ '$' + order .shift () ] = new scenario ( ... order ), {
 
 stamp,
 player: $,
-pilot: player === undefined ? undefined : pilot,
+pilot,
 [ _ .location ]: [ ... location, direction ],
 [ _ .setting ]: setting
 
