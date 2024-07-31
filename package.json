@@ -1,6 +1,6 @@
 {
   "name": "@faddys/scenarist",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Faddy's Scenarist for Writing Playable Scenarios",
   "type": "module",
   "exports": "./index.js",
