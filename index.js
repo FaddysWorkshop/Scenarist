@@ -191,10 +191,9 @@ $_producer ( $, production ) {
 
 */
 
-if ( production .scenario .$_producer )
-await $ ( Symbol .for ( 'producer' ), production );
+const product = production .scenario .$_producer ? await $ ( Symbol .for ( 'producer' ), production ) : undefined;
 
-return $;
+return product === undefined ? $ : [ $, product ];
 
 // The logic of the `Scenarist` function ends here by returning the `$` function created for the passed scenario.
 
@@ -255,8 +254,10 @@ order .shift ();
 
 else if ( typeof scenario === 'function' ) {
 
-if ( scenario === scenario ?.prototype ?.constructor )
-return await Scenarist ( scenario [ '$' + order .shift () ] = new scenario ( ... order ), {
+if ( scenario === scenario ?.prototype ?.constructor ) {
+
+const _scenario = new scenario ( ... order .slice ( 1 ) );
+const _production = {
 
 stamp,
 player: $,
@@ -264,7 +265,21 @@ pilot,
 [ _ .location ]: [ ... location, direction ],
 [ _ .setting ]: setting
 
-} );
+};
+
+if ( ! order .length )
+return await Scenarist ( _scenario, _production );
+
+let _direction = order .shift ();
+let _$direction = '$' + _direction;
+
+( player ? ( await player ( stamp ) ) .scenario : scenario ) [ _$direction ] = _scenario;
+
+let product = await Scenarist ( _scenario, _production );
+
+return product instanceof Array ? product [ 1 ] : product;
+
+}
 
 else {
 
@@ -313,6 +328,9 @@ pilot,
 } ) );
 
 $ = plot .get ( conflict );
+
+if ( $ instanceof Array )
+$ = $ [ 0 ];
 
 if ( typeof conflict === 'object' )
 ( await $ ( stamp ) ) .location = [ ... location, direction ];

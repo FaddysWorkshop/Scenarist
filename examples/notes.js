@@ -6,6 +6,9 @@ await Scenarist ( class Note {
 
 static $_producer ( $ ) {
 
+if ( this .interface )
+return;
+
 this .interface = createInterface ( { input, output } )
 .on ( 'line', argv => $ ( Symbol .for ( 'main' ), ... argv .trim () .split ( /\s+/ ) ) );
 
@@ -16,7 +19,15 @@ this .interface .prompt ();
 static $_main ( $, ... argv ) {
 
 $ ( ... argv )
-.then ( output => ( typeof output === 'string' ? console .log ( output ) : undefined ) )
+.then ( output => {
+
+if ( typeof output === 'string' )
+console .log ( output );
+
+else if ( typeof output ?.[ 1 ] === 'string' )
+console .log ( output ?.[ 1 ] );
+
+} )
 .catch ( error => console .error ( error ) )
 .finally ( () => this .interface .prompt () );
 
@@ -24,15 +35,14 @@ $ ( ... argv )
 
 constructor ( ... argv ) { this .argv = argv }
 
-async $_producer ( $ ) { await $ ( ... this .argv ) }
+async $_producer ( $ ) { return await $ ( ... this .argv ) }
 
-$_director ( $, ... argv ) {
+async $_director ( $, ... argv ) {
 
-if ( ! argv .length )
-return this .content;
-
-this .content = argv .join ( ' ' );
+return ! argv .length ? this .content : this .content = argv .join ( ' ' );
 
 }
+
+[ '$+' ] = Note
 
 } );
