@@ -28,7 +28,7 @@ else if ( typeof output ?.[ 1 ] === 'string' )
 console .log ( output ?.[ 1 ] );
 
 } )
-.catch ( error => console .error ( error ) )
+.catch ( error => console .error ( error ?.message || error ) )
 .finally ( () => this .interface .prompt () );
 
 }

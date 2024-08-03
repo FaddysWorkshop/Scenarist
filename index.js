@@ -264,8 +264,12 @@ return await Scenarist ( _scenario );
 
 let _direction = order .shift ();
 let _$direction = '$' + _direction;
+let binder = player ? ( await player ( stamp ) ) .scenario : scenario;
 
-( player ? ( await player ( stamp ) ) .scenario : scenario ) [ _$direction ] = _scenario;
+if ( binder [ _$direction ] !== undefined )
+throw Error ( 'Direction is already in use' );
+
+binder [ _$direction ] = _scenario;
 
 return ( await ( player || pilot ) ( _direction, stamp ) ) .$;
 
